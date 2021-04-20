@@ -1,0 +1,4 @@
+# Never store these files or directories into repository
+.idea/
+__pycache__/
+venv/
