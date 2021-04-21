@@ -15,6 +15,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app=app, db=db, directory="app/migrations")
 
 from app.models import MovieModel
+from app.routes import MovieRoute
 
 
 @app.route('/')
