@@ -23,3 +23,7 @@ class MovieController:
             db.session.add(post)
             db.session.commit()
             return MovieModel.Movie.data_to_json(post)
+
+
+    def get(self, id):
+        return MovieModel.Movie.query.get(id).data_to_json()

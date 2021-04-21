@@ -15,3 +15,9 @@ def get_all_movies():
 def create_new_movie():
     """Create a new movie"""
     return movies.create()
+
+
+@app.route("/api/v1/movies/<int:id>", methods=["GET"])
+def get(id):
+    """Retrieve a movie detail."""
+    return movies.get(id)
