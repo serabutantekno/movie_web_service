@@ -22,4 +22,4 @@ class MovieController:
             post = MovieModel.Movie(**data)
             db.session.add(post)
             db.session.commit()
-            return "oke"
+            return MovieModel.Movie.data_to_json(post)

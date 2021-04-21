@@ -9,5 +9,16 @@ class Movie(db.Model):
     pemain = db.Column(db.String(255), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
+
     def __repr__(self):
         return '<Movie %r>' % self.judul
+
+
+    def data_to_json(self):
+        return {
+            "judul"         : self.judul,
+            "tahun_rilis"   : self.tahun_rilis,
+            "sutradara"     : self.sutradara,
+            "pemain"        : self.pemain,
+            "rating"        : self.rating
+        }

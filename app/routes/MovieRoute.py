@@ -9,3 +9,9 @@ movies = MovieController()
 def get_all_movies():
     """Return a list of all movies"""
     return movies.get_all_movies()
+
+
+@app.route("/api/v1/movies", methods=["POST"])
+def create_new_movie():
+    """Create a new movie"""
+    return movies.create()
