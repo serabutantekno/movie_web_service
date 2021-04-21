@@ -10,6 +10,7 @@ load_dotenv(find_dotenv())  # default ==> filename = ".env"
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv("SQLALCHEMY_TRACK_MODIFICATIONS")
 
 db = SQLAlchemy(app)
 migrate = Migrate(app=app, db=db, directory="app/migrations")
