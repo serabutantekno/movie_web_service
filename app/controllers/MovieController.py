@@ -39,3 +39,22 @@ class MovieController:
         except Exception as error:
             print(error)
             return self.RESPONSE.data_not_found()
+
+
+    def update(self, id):
+        form = request.form
+        if form:
+            try:
+                data = form
+                movie = MovieModel.Movie.query.filter_by(id=id)
+                movie.update(data)
+                db.session.commit()
+                return self.RESPONSE.base_response(
+                    message="edit movie detail success",
+                    data=[MovieModel.Movie.data_to_json(movie) for movie in movie]
+                )
+            except Exception as error:
+                print(error)
+                return self.RESPONSE.error()
+        else:
+            return self.RESPONSE.no_changes()

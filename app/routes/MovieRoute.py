@@ -21,3 +21,9 @@ def create_new_movie():
 def get(id):
     """Retrieve a movie detail."""
     return movies.get(id)
+
+
+@app.route("/api/v1/movies/<int:id>", methods=["PUT"])
+def update(id):
+    """Update detail of a movie."""
+    return movies.update(id)
