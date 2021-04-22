@@ -18,6 +18,25 @@ class MovieController:
         }
 
 
+    def get_query_string(self):
+        try:
+            look_for = request.args.get("search")
+            result = MovieModel.Movie.query.filter(
+                MovieModel.Movie.judul.like(f"%{look_for}%") |\
+                MovieModel.Movie.tahun_rilis.like(f"%{look_for}%")|\
+                MovieModel.Movie.sutradara.like(f"%{look_for}%")|\
+                MovieModel.Movie.pemain.like(f"%{look_for}%")|\
+                MovieModel.Movie.rating.like(f"%{look_for}%")
+            )
+            return self.RESPONSE.base_response(
+                message=f"searched words found in {result.count()} movie(s)",
+                data=[movie.data_to_json() for movie in result]
+            )
+        except Exception as error:
+            print(error)
+            self.RESPONSE.error()
+
+
     def create(self):
         form = request.form
         if form:
