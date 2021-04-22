@@ -12,12 +12,16 @@ class MovieController:
     RESPONSE = BaseResponse()
 
     def get_all_movies(self):
-        all_movies_obj = MovieModel.Movie.query.all()
-        list_all_movies_obj = [movie.data_to_json() for movie in all_movies_obj]
-        return {
-            "message": "retrieving all movies success",
-            "data": list_all_movies_obj
-        }
+        try:
+            all_movies_obj = MovieModel.Movie.query.all()
+            list_all_movies_obj = [movie.data_to_json() for movie in all_movies_obj]
+            return {
+                "message": "retrieving all movies success",
+                "data": list_all_movies_obj
+            }
+        except Exception as error:
+            print(error)
+            return self.RESPONSE.error()
 
 
     def get_query_string(self):
@@ -40,18 +44,20 @@ class MovieController:
 
 
     def create(self):
-        form = request.form
-        if form:
-            try:
+        try:
+            form = request.form
+            if form:
                 data = form.to_dict()
                 post = MovieModel.Movie(**data)
                 db.session.add(post)
                 db.session.commit()
                 result = MovieModel.Movie.data_to_json(post)
                 return self.RESPONSE.base_response(message="a new movie added", data=result, status_code=201)
-            except Exception as error:
-                print(error)
-                return self.RESPONSE.error()
+            else:
+                return self.RESPONSE.base_response(message="no data submitted")
+        except Exception as error:
+            print(error)
+            return self.RESPONSE.error()
 
 
     def get(self, id):
@@ -63,9 +69,9 @@ class MovieController:
 
 
     def update(self, id):
-        form = request.form
-        if form:
-            try:
+        try:
+            form = request.form
+            if form:
                 data = form
                 movie = MovieModel.Movie.query.filter_by(id=id)
                 movie.update(data)
@@ -74,11 +80,11 @@ class MovieController:
                     message="edit movie detail success",
                     data=[MovieModel.Movie.data_to_json(movie) for movie in movie]
                 )
-            except Exception as error:
-                print(error)
-                return self.RESPONSE.error()
-        else:
-            return self.RESPONSE.no_changes()
+            else:
+                return self.RESPONSE.no_changes()
+        except Exception as error:
+            print(error)
+            return self.RESPONSE.error()
 
 
     def delete(self, id):
@@ -121,7 +127,11 @@ class MovieController:
                 data.seek(0)
                 data.truncate(0)
 
-        # stream the response as the data is generated
-        response = Response(generate(), mimetype="text/csv")
-        response.headers.set("Content-Disposition", "attachment", filename="movies.csv")
-        return response
+        try:
+            # stream the response as the data is generated
+            response = Response(generate(), mimetype="text/csv")
+            response.headers.set("Content-Disposition", "attachment", filename="movies.csv")
+            return response
+        except Exception as error:
+            print(error)
+            return self.RESPONSE.error()
