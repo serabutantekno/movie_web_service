@@ -20,3 +20,7 @@ class BaseResponse:
 
     def data_not_found(self):
         return self.base_response(message="data not found", status_code=404)
+
+
+    def no_changes(self):
+        return self.base_response(message="no changes detected")
