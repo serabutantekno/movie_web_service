@@ -37,3 +37,9 @@ def update(id):
 def delete(id):
     """Delete a movie."""
     return movies.delete(id)
+
+
+@app.route("/api/v1/movies/export/csv", methods=["GET"])
+def export_csv():
+    """Generate csv file from model"""
+    return movies.generate_csv()

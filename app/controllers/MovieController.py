@@ -1,4 +1,6 @@
+import csv, io
 from flask import request
+from werkzeug.wrappers import Response
 from app import db
 from app.controllers.BaseResponseController import BaseResponse
 from app.models import MovieModel
@@ -91,3 +93,35 @@ class MovieController:
         except Exception as error:
             print(error)
             return self.RESPONSE.error()
+
+
+    def generate_csv(self):
+
+        def generate():
+            csv_columns = [
+                "id",
+                "judul",
+                "tahun_rilis",
+                "sutradara",
+                "pemain",
+                "rating"
+            ]
+            data = io.StringIO()
+            writer = csv.writer(data)
+            writer.writerow(csv_columns)  # write csv headers
+            yield data.getvalue()
+            data.seek(0)
+            data.truncate(0)
+
+            list_movies = [movie for movie in MovieModel.Movie.query.all()]
+            for movie in list_movies:  # write each movie items
+                line = [movie.id, movie.judul, movie.tahun_rilis, movie.sutradara, movie.pemain, movie.rating]
+                writer.writerow(line)
+                yield data.getvalue()
+                data.seek(0)
+                data.truncate(0)
+
+        # stream the response as the data is generated
+        response = Response(generate(), mimetype="text/csv")
+        response.headers.set("Content-Disposition", "attachment", filename="movies.csv")
+        return response
