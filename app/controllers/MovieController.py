@@ -58,3 +58,17 @@ class MovieController:
                 return self.RESPONSE.error()
         else:
             return self.RESPONSE.no_changes()
+
+
+    def delete(self, id):
+        try:
+            movie = MovieModel.Movie.query.get(id)
+            db.session.delete(movie)
+            db.session.commit()
+            return self.RESPONSE.base_response(
+                message=f"{movie.judul} deleted successfully",
+                data=[MovieModel.Movie.data_to_json(movie)]
+            )
+        except Exception as error:
+            print(error)
+            return self.RESPONSE.error()

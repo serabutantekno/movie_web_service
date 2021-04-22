@@ -27,3 +27,9 @@ def get(id):
 def update(id):
     """Update detail of a movie."""
     return movies.update(id)
+
+
+@app.route("/api/v1/movies/<int:id>", methods=["DELETE"])
+def delete(id):
+    """Delete a movie."""
+    return movies.delete(id)
